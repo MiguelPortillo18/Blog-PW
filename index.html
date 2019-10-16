@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
+
+</html>
 
 <head>
     <meta charset="UTF-8">
@@ -434,16 +436,23 @@
                             RETURN NEW;
                         END;
                         $$ LANGUAGE plpgsql;
-                        CREATE TRIGGER proyecto_erp_no_en_otras BEFORE INSERT OR UPDATE ON erp FOR EACH ROW 
+                        CREATE TRIGGER proyecto_erp_no_en_otras BEFORE INSERT OR UPDATE ON erp 
+                        FOR EACH ROW 
                         EXECUTE PROCEDURE proyecto_ya_esta_en_otra_subclase();
-                        CREATE TRIGGER proyecto_venta_almacen_no_en_otras BEFORE INSERT OR UPDATE ON venta_almacen FOR EACH ROW 
+                        CREATE TRIGGER proyecto_venta_almacen_no_en_otras BEFORE INSERT OR UPDATE ON 
+                        venta_almacen FOR EACH ROW 
                         EXECUTE PROCEDURE proyecto_ya_esta_en_otra_subclase();
-                        CREATE TRIGGER proyecto_web_no_en_otras BEFORE INSERT OR UPDATE ON web FOR EACH ROW 
+                        CREATE TRIGGER proyecto_web_no_en_otras BEFORE INSERT OR UPDATE ON web 
+                        FOR EACH ROW 
                         EXECUTE PROCEDURE proyecto_ya_esta_en_otra_subclase();</pre><br>
 
-                        <p>--Función para comprobación de que los proyectos están siendo introducidos en la subclase correcta. Es importante notar que aunque la especialización es parcial, si los proyectos son de tipo Web, Venta_almacen o ERP, deben ser a la vez introducidos en la subclase correspondiente y en proyecto, como si fuera total. Para ello debe tomarse en cuenta que los respectivos FK de las subclases a la superclase son diferibles.</p>
+                <p>--Función para comprobación de que los proyectos están siendo introducidos en la subclase correcta.
+                    Es importante notar que aunque la especialización es parcial, si los proyectos son de tipo Web,
+                    Venta_almacen o ERP, deben ser a la vez introducidos en la subclase correspondiente y en proyecto,
+                    como si fuera total. Para ello debe tomarse en cuenta que los respectivos FK de las subclases a la
+                    superclase son diferibles.</p>
 
-                        <pre>
+                <pre>
                             CREATE OR REPLACE FUNCTION comprueba_proyecto_subclase() RETURNS TRIGGER AS $$
                                 DECLARE 
                                     prueba_web RECORD;
@@ -460,19 +469,24 @@
                                     
                                     IF(tipo='O' AND (prueba_web.codigo_proyecto IS NOT NULL OR prueba_erp.codigo_proyecto IS NOT NULL OR 
                                     prueba_venta_almacen.codigo_proyecto IS NOT NULL)) THEN
-                                        RAISE EXCEPTION 'El proeycto % es de tipo Otro pero ha sido introducido en una subclase cuando no deberia',NEW.codigo;
+                                        RAISE EXCEPTION 'El proeycto % es de tipo Otro pero ha sido introducido en una subclase cuando no deberia',
+                                        NEW.codigo;
                                     ELSEIF tipo = 'W' AND prueba_web.codigo_proyecto IS NULL THEN
-                                        RAISE EXCEPTION 'EL proyecto % es de tipo Web pero no ha sido previamente introducido en la subclase correcta', NEW.codigo;
+                                        RAISE EXCEPTION 'EL proyecto % es de tipo Web pero no ha sido previamente introducido en la subclase correcta', 
+                                        NEW.codigo;
                                     ELSEIF tipo = 'E' AND prueba_erp.codigo_proyecto IS NULL THEN
-                                        RAISE EXCEPTION 'EL proyecto % es de tipo ERP pero no ha sido previamente introducido en la subclase correcta', NEW.codigo;
+                                        RAISE EXCEPTION 'EL proyecto % es de tipo ERP pero no ha sido previamente introducido en la subclase correcta', 
+                                        NEW.codigo;
                                     ELSEIF tipo = 'V' AND prueba_venta_almacen.codigo_proyecto IS NULL THEN
-                                        RAISE EXCEPTION 'EL proyecto % es de tipo Venta_almacen pero no ha sido previamente introducido en la subclase correcta',NEW.codigo;
+                                        RAISE EXCEPTION 'EL proyecto % es de tipo Venta_almacen pero no ha sido previamente introducido en la subclase correcta',
+                                        NEW.codigo;
                                     ELSE
                                         RETURN NEW;
                                     END IF;
                                 END;
                                 $$ LANGUAGE plpgsql;
-                                CREATE TRIGGER proyecto_en_subclase BEFORE INSERT OR UPDATE ON proyecto FOR EACH ROW 
+                                CREATE TRIGGER proyecto_en_subclase BEFORE INSERT OR UPDATE ON proyecto 
+                                FOR EACH ROW 
                                 EXECUTE PROCEDURE comprueba_proyecto_subclase();</pre>
 
                 <p>Luego de haber realizado este último trabajo recibimos un mensaje de parte de Kurt, en el cual
