@@ -3,10 +3,11 @@
 
 /*Diseño base para dispositivos moviles*/
 
-*, *::before, *::after{
+*,::before,::after{
     margin: 0;
     padding: 0;
     list-style: none;
+    box-sizing: border-box;
     font-family: 'hepta slab', sans-serif;
 }
 
@@ -67,11 +68,20 @@ article{
 
 h2{
     padding-top: 20px;
-}
+} 
 
 article>p{
     margin: 1.5em;
 }
+
+.post2,.post3,.post4,.post5{
+    display: none;
+}
+
+pre{
+    text-align: start;
+}
+
 
 @media only screen and (min-width: 1024px){
 
@@ -105,5 +115,13 @@ article>p{
 
     article>p{
         margin: 2em;
+    }
+
+    .post2,.post3,.post4,.post5{
+        display: none;
+    }
+
+    pre{
+        text-align: justify;
     }
 }

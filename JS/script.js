@@ -3,8 +3,6 @@ function repeat(n, action) {
         action(i);
 }
 
-
-
 window.onload = () => {
     let buttons = [];
     repeat(5, i => buttons.push(document.getElementById("button" + (i + 1))));
@@ -21,7 +19,6 @@ window.onload = () => {
                 else
                     postEvent.style.display = "none";
             }
-
         })
     }
 }
